@@ -23,14 +23,13 @@
 
     for ( var i = 0; i < liList.length; i++ ) {
       var prevNode = liList[i].previousSibling;
-        while (prevNode && prevNode.nodeType != Node.COMMENT_NODE) {
-            prevNode = prevNode.previousSibling;
-        }
+      while (prevNode && prevNode.nodeType !== Node.COMMENT_NODE && prevNode.nodeName !== 'LI') {
+          prevNode = prevNode.previousSibling;
+      }
 
-        if(prevNode) {
-            liList[i].style[className === 'foreground' ? "color" : "backgroundColor"] = prevNode.data.trim();
-        }
-
+      if(prevNode && prevNode.nodeName !== 'LI') {
+          liList[i].style[className === 'foreground' ? "color" : "backgroundColor"] = prevNode.data.trim();
+      }
     }
   }
 
