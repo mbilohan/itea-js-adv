@@ -1,0 +1,82 @@
+/*
+1. The first letter of the first paragraph directly in body.
+
+2. All images with attribute data-type="jpg-png".
+2.a. All images with attribute data-type="jpg-png" on Hover.
+
+3. All li items that are 2-nd from end in ul elements.
+
+4. All not li elements that are in ul .
+
+5. The first line of all elements with attribute data-emet-attr that ends with '29'
+
+6. All li items that are odd in ul elements.
+
+7. Set selection of text.
+*/
+
+
+body {
+	width: 960px;
+	margin: 0 auto;
+}
+
+/* 1 */
+body > p:first-of-type:first-letter {
+	font-size: 48px;
+}
+
+/* 2 */
+img[data-type=jpg-png] {
+	width: 250px;
+	border: 3px solid green;
+}
+/* 2a */
+img[data-type=jpg-png]:hover {
+	border: 3px dotted green;
+}
+
+/* 3 */
+ul > li:nth-last-of-type(2) {
+	text-decoration: underline;
+}
+/* 3 */
+ul > li:nth-last-of-type(2)::after {
+	content: '(2nd last li)';
+    font-size: 12px;
+    color: red;
+}
+
+/* 4 */
+ul *:not(li) {
+	text-decoration: line-through;
+}
+/* 4 */
+ul *:not(li)::after {
+	content: '(not li in ul)';
+    display: inline-block;
+    font-size: 12px;
+    color: brown;
+}
+
+/* 5 */
+[data-emet-attr$='29']:first-line {
+	color: pink;
+}
+
+/* 6 */
+ul li:nth-of-type(2n-1) {
+	color: purple;
+}
+/* 6 */
+ul li:nth-of-type(odd)::after {
+	content: '(odd li)';
+    font-size: 12px;
+    color: green;
+}
+
+/* 7 */
+::selection {
+    background-color: darkblue;
+    color: white;
+}
