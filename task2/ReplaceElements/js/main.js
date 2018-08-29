@@ -4,11 +4,9 @@ function replaceElements(targetSelector, tagName, attrs) {
     var newEl = document.createElement(tagName);
     newEl.innerHTML = targetEl.innerHTML;
 
-    if(targetEl.hasAttribute) {
-        var targetAttrs = targetEl.attributes;
-        for(var i = 0; i < targetAttrs.length; i++ ) {
-            newEl.setAttribute(targetAttrs[i].nodeName, targetAttrs[i].nodeValue)
-        }
+    var targetAttrs = targetEl.attributes;
+    for(var i = 0; i < targetAttrs.length; i++ ) {
+        newEl.setAttribute(targetAttrs[i].nodeName, targetAttrs[i].nodeValue)
     }
 
     for(var j = 0; j < attrs.length; j++ ) {
