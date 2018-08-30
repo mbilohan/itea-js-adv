@@ -1,25 +1,27 @@
 function replaceElements(targetSelector, tagName, attrs) {
-    var targetEl = document.querySelector(targetSelector);
+    var targetEls = document.querySelectorAll(targetSelector);
 
-    var newEl = document.createElement(tagName);
-    newEl.innerHTML = targetEl.innerHTML;
+    for(var el = 0; el < targetEls.length; el++) {
+        var newEl = document.createElement(tagName);
+        newEl.innerHTML = targetEls[el].innerHTML;
 
-    var targetAttrs = targetEl.attributes;
-    for(var i = 0; i < targetAttrs.length; i++ ) {
-        newEl.setAttribute(targetAttrs[i].nodeName, targetAttrs[i].nodeValue)
-    }
-
-    for(var j = 0; j < attrs.length; j++ ) {
-        if(attrs[j].key === 'style') {
-            newEl.style.cssText += attrs[j].value;
-        } else if(attrs[j].key === 'class') {
-            newEl.classList.add(attrs[j].value);
-        } else {
-            newEl.setAttribute(attrs[j].key, attrs[j].value)
+        var targetAttrs = targetEls[el].attributes;
+        for(var i = 0; i < targetAttrs.length; i++ ) {
+            newEl.setAttribute(targetAttrs[i].nodeName, targetAttrs[i].nodeValue)
         }
-    }
 
-    targetEl.parentNode.replaceChild(newEl, targetEl);
+        for(var j = 0; j < attrs.length; j++ ) {
+            if(attrs[j].key === 'style') {
+                newEl.style.cssText += attrs[j].value;
+            } else if(attrs[j].key === 'class') {
+                newEl.classList.add(attrs[j].value);
+            } else {
+                newEl.setAttribute(attrs[j].key, attrs[j].value)
+            }
+        }
+
+        targetEls[el].parentElement .replaceChild(newEl, targetEls[el]);
+    }
 }
 
 
