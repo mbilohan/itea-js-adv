@@ -1,0 +1,76 @@
+body {
+    margin: 0;
+    padding: 0;
+    background: #f9f9f9;
+}
+
+.scoreboard {
+    display: flex;
+    justify-content: space-around;
+}
+
+.player {
+    font-size: 40px;
+    font-weight: 700;
+}
+
+.player:first-child {
+    color: #30556b;
+    text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.4);
+}
+
+.player-second .player:first-child {
+    text-shadow: none;
+}
+
+.player:last-child {
+    color: #a63a27;
+}
+
+.player-second .player:last-child {
+    text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.4);
+}
+
+.score {
+    font-size: 45px;
+}
+
+#field {
+    margin: 30px auto;
+    width: 300px;
+    overflow: hidden;
+}
+
+#field button {
+    float: left;
+    width: 100px;
+    height: 100px;
+    border: 4px solid #1e90ff;
+    border-radius: 3px;
+    background: none;
+    cursor: pointer;
+    transition: background 0.2s ease;
+    position: relative;
+}
+
+#field button:hover {
+    background: #b5d6f7;
+}
+
+#field button::after {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 40px;
+}
+
+#field button[data-value='0']::after {
+    content: 'O';
+    color: #30556b;
+}
+
+#field button[data-value='1']::after {
+    content: 'X';
+    color: #a63a27;
+}
