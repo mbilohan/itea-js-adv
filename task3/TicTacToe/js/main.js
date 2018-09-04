@@ -10,29 +10,18 @@
         []
     ];
 
-    for(var i = 0; i < buttons.length; i++) {
-        cells[buttons[i].dataset.row][buttons[i].dataset.col] = buttons[i];
+    var createField = function() {
+        for(var i = 0; i < buttons.length; i++) {
+            cells[buttons[i].dataset.row][buttons[i].dataset.col] = buttons[i];
+        }
     }
 
-    field.addEventListener('click', function(event) {
-        var cell = event.target,
-            row = cell.dataset.row,
-            col = cell.dataset.col;
+    var gameOver = function(msg) {
+        field.removeEventListener('click', playerMove);
+        alert('the game is over!!! Something should happen...  ' + msg);
+    }
 
-        /* check if cell is not empty */
-        if(cell.dataset.value !== undefined) {
-            return false;
-        }
-
-        /* set value to cell */
-        if(player1) {
-            cell.dataset.value = 0;
-        } else {
-            cell.dataset.value = 1;
-        }
-
-        var value = event.target.dataset.value;
-
+    var isRowCompleted = function(value, row) {
         /* check horizontal line */
         var rowLine = true;
         for(var i = 0; i < 3; i++) {
@@ -42,9 +31,11 @@
         }
 
         if(rowLine) {
-            alert('end row');
+            gameOver('row complete');
         }
+    }
 
+    var isColCompleted = function(value, col) {
         /* check vertical line */
         var colLine = true;
         for(var i = 0; i < 3; i++) {
@@ -54,11 +45,13 @@
         }
 
         if(colLine) {
-            alert('end col');
+            gameOver('col complete');
         }
+    }
 
+    var isDiagonalCompleted = function(value) {
         /* check diagonals */
-        /* @TODO: add condition when diagonals should be checked */
+        /* TODO: add condition when diagonals should be checked */
 
         /* diagonal from top left to bottom right */
         var diagonal1 = true;
@@ -69,9 +62,9 @@
         }
 
         if(diagonal1) {
-            alert('end diagonal 1');
+            gameOver('diagonal1 complete');
+            return false;
         }
-
 
         /* diagonal from top right to bottom left */
         var diagonal2 = true;
@@ -82,29 +75,71 @@
         }
 
         if(diagonal2) {
-            alert('end diagonal 2');
+            gameOver('diagonal2 complete');
         }
+    }
 
+    var checkLines = function(cell, value) {
+        var row = cell.dataset.row,
+            col = cell.dataset.col;
 
+        isRowCompleted(value, row);
+        isColCompleted(value, col);
+        isDiagonalCompleted(value);
+    }
+
+    var changePlayer = function() {
+        player1 = !player1;
+        document.querySelector('.scoreboard').classList.toggle('player-second');
+    }
+
+    var isCellFilled = function(cell) {
+        /* check if cell is not empty */
+        return cell.dataset.value !== undefined;
+    }
+
+    var isFieldFilled = function() {
         /* check if empty cells exist */
-        var emptyCell = true;
+        var cellsFilled = true;
         for(var i = 0; i < buttons.length; i++) {
             if(buttons[i].dataset.value === undefined) {
-                emptyCell = false
+                cellsFilled = false
             }
         }
 
-        if(emptyCell) {
-            alert('Ooops! No empty cells')
+        if(cellsFilled) {
+            gameOver();
+        }
+    }
+
+    var playerMove = function(event) {
+        var cell = event.target;
+
+        if(isCellFilled(cell)) {
+            return;
+        };
+
+        /* set value to cell */
+        if(player1) {
+            cell.dataset.value = 0;
+        } else {
+            cell.dataset.value = 1;
         }
 
-        /* change player */
+        var value = event.target.dataset.value;
+
+        checkLines(cell, value);
         changePlayer();
 
-        function changePlayer() {
-            player1 = !player1;
-            document.querySelector('.scoreboard').classList.toggle('player-second');
-        }
-    })
+        isFieldFilled();
+
+    }
+
+    var startGame = function() {
+        createField();
+        field.addEventListener('click', playerMove);
+    }
+
+    startGame();
 
 })();
