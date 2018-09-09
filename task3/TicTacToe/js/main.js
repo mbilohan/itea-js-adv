@@ -2,7 +2,15 @@
     var field = document.getElementById('field');
     var buttons = field.children;
 
-    var player1 = true;
+    var player1 = true,
+        playersNames = document.querySelectorAll('.player');
+
+    var score = {
+        element: document.querySelector('.score'),
+        message: document.getElementById('message'),
+        player1: 0,
+        player2: 0
+    }
 
     var cells = [
         [],
@@ -16,9 +24,23 @@
         }
     }
 
-    var gameOver = function(msg) {
+    var gameOver = function(isDraw) {
         field.removeEventListener('click', playerMove);
-        alert('the game is over!!! Something should happen...  ' + msg);
+        field.setAttribute('data-disabled', true);
+
+        if(isDraw) {
+            message.textContent = 'No more moves. Please, start new game';
+        } else {
+            if(player1) {
+                score.player1 += 1;
+                message.textContent = 'Player 1 win!';
+            } else {
+                score.player2 += 1;
+                message.textContent = 'Player 2 win!';
+
+            }
+            updateScore();
+        }
     }
 
     var isRowCompleted = function(value, row) {
@@ -31,8 +53,12 @@
         }
 
         if(rowLine) {
-            gameOver('row complete');
+            gameOver();
+
+            return true;
         }
+
+        return false;
     }
 
     var isColCompleted = function(value, col) {
@@ -45,13 +71,16 @@
         }
 
         if(colLine) {
-            gameOver('col complete');
+            gameOver();
+
+            return true;
         }
+
+        return false;
     }
 
     var isDiagonalCompleted = function(value) {
         /* check diagonals */
-        /* TODO: add condition when diagonals should be checked */
 
         /* diagonal from top left to bottom right */
         var diagonal1 = true;
@@ -62,8 +91,9 @@
         }
 
         if(diagonal1) {
-            gameOver('diagonal1 complete');
-            return false;
+            gameOver();
+
+            return true;
         }
 
         /* diagonal from top right to bottom left */
@@ -75,22 +105,26 @@
         }
 
         if(diagonal2) {
-            gameOver('diagonal2 complete');
+            gameOver();
+
+            return true;
         }
+
+        return false;
     }
 
     var checkLines = function(cell, value) {
         var row = cell.dataset.row,
             col = cell.dataset.col;
 
-        isRowCompleted(value, row);
-        isColCompleted(value, col);
-        isDiagonalCompleted(value);
+        return isRowCompleted(value, row) || isColCompleted(value, col) || isDiagonalCompleted(value);
     }
 
     var changePlayer = function() {
         player1 = !player1;
-        document.querySelector('.scoreboard').classList.toggle('player-second');
+        for(var i = 0; i < playersNames.length; i++) {
+            playersNames[i].classList.toggle('active');
+        }
     }
 
     var isCellFilled = function(cell) {
@@ -98,7 +132,7 @@
         return cell.dataset.value !== undefined;
     }
 
-    var isFieldFilled = function() {
+    var isEmptyCells = function() {
         /* check if empty cells exist */
         var cellsFilled = true;
         for(var i = 0; i < buttons.length; i++) {
@@ -108,14 +142,18 @@
         }
 
         if(cellsFilled) {
-            gameOver();
+            gameOver(true);
+
+            return false;
         }
+
+        return true;
     }
 
     var playerMove = function(event) {
         var cell = event.target;
 
-        if(isCellFilled(cell)) {
+        if(isCellFilled(cell) || cell.dataset.row === undefined) {
             return;
         };
 
@@ -128,18 +166,54 @@
 
         var value = event.target.dataset.value;
 
-        checkLines(cell, value);
-        changePlayer();
-
-        isFieldFilled();
-
+        var isGameOver = checkLines(cell, value);
+        if(!isGameOver) {
+            var isGameContinue = isEmptyCells();
+        }
+        if(isGameContinue) {
+            changePlayer();
+        }
     }
 
-    var startGame = function() {
+    var refreshField = function() {
+        for(var i = 0; i < buttons.length; i++) {
+            buttons[i].removeAttribute('data-value');
+        }
+
+        player1 = true;
+        field.removeAttribute('data-disabled');
+        message.textContent = '';
+    }
+    var updateScore = function() {
+        score.element.textContent = score.player1 + ' : ' + score.player2;
+
+    }
+    var startGame = function(option) {
+        if(option !== undefined) {
+            refreshField();
+        }
+
+        if(option === 'reset') {
+            score.player1 = score.player2 = 0;
+            updateScore();
+        }
+
         createField();
         field.addEventListener('click', playerMove);
     }
 
     startGame();
 
+
+    /* start new round */
+    var btnStart = document.getElementById('btn-start');
+    btnStart.addEventListener('click', function() {
+        startGame('round');
+    });
+
+    /* reset score */
+    var btnReset = document.getElementById('btn-reset');
+    btnReset.addEventListener('click', function() {
+        startGame('reset');
+    })
 })();
