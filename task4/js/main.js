@@ -1,12 +1,12 @@
 function Person(firstName, lastName, age, gender) {
-    this.firstName = firstName;
-    this.lastName = lastName;
-
     var MAX_AGE = 150;
-    var MIN_AGE = 0
+    var MIN_AGE = 0;
     var GENDERS = ['Male', 'Female'];
 
     var _age, _gender;
+
+    this.firstName = firstName;
+    this.lastName = lastName;
 
     this.setAge = function(age) {
         if(age < MIN_AGE || age > MAX_AGE) {
@@ -34,7 +34,8 @@ function Person(firstName, lastName, age, gender) {
 function Employee(firstName, lastName, age, gender, email, id) {
     this.email = email;
     this.id = id;
-    Person.call(this, firstName, lastName, age, gender);
+    // Person.call(this, firstName, lastName, age, gender);
+    this.__proto__ = new Person( firstName, lastName, age, gender);
 }
 
 var mariia = new Person('Mariia', 'Kostornychenko', 25, 'Female');
