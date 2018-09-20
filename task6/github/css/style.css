@@ -1,3 +1,9 @@
-#user {
+#user, #repos {
     display: none;
+}
+
+#useravatar {
+    width: 250px;
+    height: auto;
+    display: block;
 }
