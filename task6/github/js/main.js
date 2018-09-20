@@ -13,6 +13,11 @@
                 elements.userName.innerText = result.name;
                 elements.userRepos.dataset.userLogin = result.login;
             });
+
+            sections.repos.style.display = 'none';
+            while (sections.repos.firstChild) {
+                sections.repos.removeChild(sections.repos.firstChild);
+            }
         }
     }
 
