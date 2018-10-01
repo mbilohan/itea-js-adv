@@ -1,0 +1,29 @@
+div#gamefield {
+	padding: 50px;
+	font-size: 48px;
+	border: 2px solid green;
+	background-color: white;
+}
+
+h1 {
+	text-align: center;
+}
+
+h1#currentLetter.animated{
+    animation: fadein 2s infinite;
+}
+
+
+span.valid {
+	color: green;
+}
+
+span.error {
+	color: red;
+}
+
+
+@keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
